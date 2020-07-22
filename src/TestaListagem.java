@@ -1,7 +1,7 @@
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class TestaListagem {
 	
@@ -10,11 +10,9 @@ public class TestaListagem {
 		ConnectionFactory connectionFactory = new ConnectionFactory();
 		Connection connection = connectionFactory.recuperarConexao();
 		
-		Statement stm =  connection.createStatement();
-		boolean resultado = stm.execute("SELECT ID, NOME, DESCRICAO FROM PRODUTO");
-		
-//		Vai retornar true
-		System.out.println(resultado);
+//		Neste caso não é necessário colocar atributos (??)
+		PreparedStatement stm =  connection.prepareStatement("SELECT ID, NOME, DESCRICAO FROM PRODUTO");
+		stm.execute();
 		
 		ResultSet rst = stm.getResultSet();
 		while (rst.next()) {

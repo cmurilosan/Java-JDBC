@@ -14,6 +14,7 @@ public class TestaInsercaoComParametro {
 		ConnectionFactory factory = new ConnectionFactory();
 		Connection connection = factory.recuperarConexao();
 		
+//		PreparedStatement deixa o código muito mais seguro, sem ter o risco de uma inserção deletar todo nosso banco, por exemplo
 		PreparedStatement stm = connection.prepareStatement(
 				"INSERT INTO PRODUTO (nome, descricao)"	+ "VALUES (?, ?)", 
 				Statement.RETURN_GENERATED_KEYS);
