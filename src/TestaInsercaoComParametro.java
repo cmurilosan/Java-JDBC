@@ -12,19 +12,16 @@ public class TestaInsercaoComParametro {
 		Connection connection = factory.recuperarConexao();
 		connection.setAutoCommit(false);	//Assume o controle da transação e tira a responsabilidade do JDBC
 		
-		try {
-			PreparedStatement stm = connection.prepareStatement(
+		try (PreparedStatement stm = connection.prepareStatement(
 					"INSERT INTO PRODUTO (nome, descricao)"	+ "VALUES (?, ?)", 
 					Statement.RETURN_GENERATED_KEYS);
+				){
 			
 			
 			adicionarVariavel("SmartTV", "60 polegadas", stm);
 			adicionarVariavel("Celular", "Iphone 11", stm);
 			
 			connection.commit();
-			
-			stm.close();
-			connection.close();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -44,12 +41,12 @@ public class TestaInsercaoComParametro {
 		
 		stm.execute();
 		
-		ResultSet rst = stm.getGeneratedKeys();
+		try(ResultSet rst = stm.getGeneratedKeys()) {
 		while(rst.next()) {
 			Integer id = rst.getInt(1);
 			System.out.println("O id criado foi: " + id);
 		}
-		rst.close();
+		}
 	}
 
 }
