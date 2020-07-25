@@ -9,24 +9,26 @@ public class TestaInsercaoComParametro {
 	public static void main(String[] args) throws SQLException {
 		
 		ConnectionFactory factory = new ConnectionFactory();
-		Connection connection = factory.recuperarConexao();
-		connection.setAutoCommit(false);	//Assume o controle da transação e tira a responsabilidade do JDBC
+		try(Connection connection = factory.recuperarConexao()){
 		
-		try (PreparedStatement stm = connection.prepareStatement(
-					"INSERT INTO PRODUTO (nome, descricao)"	+ "VALUES (?, ?)", 
-					Statement.RETURN_GENERATED_KEYS);
-				){
+			connection.setAutoCommit(false);	//Assume o controle da transação e tira a responsabilidade do JDBC
 			
-			
-			adicionarVariavel("SmartTV", "60 polegadas", stm);
-			adicionarVariavel("Celular", "Iphone 11", stm);
-			
-			connection.commit();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("ROLLBACK EXECUTADO");
-			connection.rollback();
+			try (PreparedStatement stm = connection.prepareStatement(
+						"INSERT INTO PRODUTO (nome, descricao)"	+ "VALUES (?, ?)", 
+						Statement.RETURN_GENERATED_KEYS);
+					){
+				
+				
+				adicionarVariavel("SmartTV", "60 polegadas", stm);
+				adicionarVariavel("Celular", "Iphone 11", stm);
+				
+				connection.commit();
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("ROLLBACK EXECUTADO");
+				connection.rollback();
+			}
 		}
 		
 	}
@@ -42,10 +44,10 @@ public class TestaInsercaoComParametro {
 		stm.execute();
 		
 		try(ResultSet rst = stm.getGeneratedKeys()) {
-		while(rst.next()) {
-			Integer id = rst.getInt(1);
-			System.out.println("O id criado foi: " + id);
-		}
+			while(rst.next()) {
+				Integer id = rst.getInt(1);
+				System.out.println("O id criado foi: " + id);
+			}
 		}
 	}
 
