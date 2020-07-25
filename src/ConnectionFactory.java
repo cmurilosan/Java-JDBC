@@ -15,6 +15,9 @@ public class ConnectionFactory {
 		comboPooledDataSource.setUser("root");
 		comboPooledDataSource.setPassword("groove");
 		
+		comboPooledDataSource.setMaxPoolSize(15);
+		// Estipulei a 15 conexões
+		
 		this.dataSource = comboPooledDataSource;
 	}
 	
