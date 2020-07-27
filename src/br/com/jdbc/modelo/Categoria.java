@@ -14,6 +14,10 @@ public class Categoria {
 	public String getNome() {
 		return this.nome;
 	}
+
+	public int getId() {
+		return this.id;
+	}
 	
 	
 
